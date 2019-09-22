@@ -60,13 +60,31 @@ class PortScanner_Init():
 
         self.banner()
 
-        inputs = 1
-        while inputs != 0:
+        # Schleifeninitialisierung
+        self.inputs = 1
+        self.frageschleife = 1
+
+        # Eingabeschleife
+        while self.inputs != 0:
             try:
                 print()
                 self.remoteServer = input("Enter a remote host to scan: ")
                 self.remoteServerIP = socket.gethostbyname(self.remoteServer)
-                inputs = 0
+
+                # Eingabebestätigung
+                while self.frageschleife != 0:
+                    print("Scan:", self.remoteServer, "IP:", self.remoteServerIP, "Press [Y] to start and [N] to abort")
+                    self.frage = input()
+                    if "y" in self.frage:
+                        self.inputs = 0
+                        self.frageschleife = 0
+                    elif "n" in self.frage:
+                        print("Aborted!")
+                        sys.exit()
+                    elif "y" or "n" not in self.frage:
+                        print("Wrong Value, Try Again!")
+                        continue
+
             except KeyboardInterrupt:
                 print()
                 print("You presses Ctrl+C")
