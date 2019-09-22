@@ -14,9 +14,9 @@ class PortScanner_Init():
     def __init__(self):
 
         # Zeitmessung
-        lt = localtime()
-        self.jahr, self.monat, self.tag = lt[0:3]
-        self.stunde, self.minute, self.sekunde = lt[3:6]
+        self.lt = localtime()
+        self.jahr, self.monat, self.tag = self.lt[0:3]
+        self.stunde, self.minute, self.sekunde = self.lt[3:6]
 
         self.zeitbeginn = bytes()
         self.zeitende = bytes()
@@ -33,22 +33,22 @@ class PortScanner_Init():
     def __str__(self):
 
         return "-" * 60 + "\n" \
-               + "Please wait, scanning remtoe host: " + self.remoteServerIP \
+               + "Please wait, scanning remote Host: " + self.remoteServerIP \
                + "\n" + "-" * 60
 
     def ausgabe(self, x):
 
         if x == 0:
-            print(f"Datum: {portscanner_init.tag:02d}.{portscanner_init.monat:02d}.{portscanner_init.jahr:4d}")
-            print(f"Uhrzeit: {portscanner_init.stunde:02d}:{portscanner_init.minute:02d}:{portscanner_init.sekunde:02d}")
+            print(f"Date: {portscanner_init.tag:02d}.{portscanner_init.monat:02d}.{portscanner_init.jahr:4d}")
+            print(f"Time: {portscanner_init.stunde:02d}:{portscanner_init.minute:02d}:{portscanner_init.sekunde:02d}")
             print(portscanner_init)
         elif x == 1:
             print()
             print("Time Consumetion:")
-            print("-" + 60)
+            print("-" * 60)
             print('Scanning Completed in: ', portscanner_init.zeitgesamt)
-            print(f"Datum: {portscanner_init.tag:02d}.{portscanner_init.monat:02d}.{portscanner_init.jahr:4d}")
-            print(f"Uhrzeit: {portscanner_init.stunde:02d}:{portscanner_init.minute:02d}:{portscanner_init.sekunde:02d}")
+            print(f"Date: {portscanner_init.tag:02d}.{portscanner_init.monat:02d}.{portscanner_init.jahr:4d}")
+            print(f"Time: {portscanner_init.stunde:02d}:{portscanner_init.minute:02d}:{portscanner_init.sekunde:02d}")
 
     # Eingabe
     def eingabe(self):
@@ -127,7 +127,6 @@ class PortScanner(PortScanner_Init):
                     print("Results:", self.count, "Open Ports found")
                     print("-" * 60)
                     print("Port {}: 	 Open".format(self.open))
-                    print("-" * 60)
                 self.sock.close()
 
         except KeyboardInterrupt:
