@@ -71,9 +71,11 @@ class PortScanner_Init():
             except RuntimeError:
                 print()
                 print("Wrong Statement")
+                sys.exit()
             except ValueError:
                 print()
                 print("You must enter a valid Host")
+                sys.exit()
 
     # Methode zur Ermittlung von Zeitwerten
     def zeit(self, x):
