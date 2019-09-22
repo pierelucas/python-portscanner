@@ -7,7 +7,7 @@ import sys
 import time
 
 # Klasse mit Eigenschaften, Eingabe, Ausgabe und Zeitberechnung
-class PortScanner_Init():
+class PortScanner_Init:
 
     # Methoden
     def __init__(self):
@@ -30,11 +30,14 @@ class PortScanner_Init():
         self.remoteServer = []
         self.remoteServerIP = bytes()
 
+        # Verbose Modus
+        self.verbose = 0
+
     # Ausgabe
     def __str__(self):
 
         return "-" * 60 + "\n" \
-               + "Please wait, scanning remote Host: " + self.remoteServerIP \
+               + "Please wait, Starting to scan remote Host: " + self.remoteServerIP \
                + "\n" + "-" * 60
 
     def ausgabe(self, x):
@@ -42,7 +45,10 @@ class PortScanner_Init():
         if x == 0:
             print(f"Date: {self.tag:02d}.{self.monat:02d}.{self.jahr:4d}")
             print(f"Time: {self.stunde:02d}:{self.minute:02d}:{self.sekunde:02d}")
-            self.__str__()
+            print()
+            time.sleep(1)
+            print(self.__str__())
+            time.sleep(3)
 
         elif x == 1:
             print()
@@ -78,16 +84,42 @@ class PortScanner_Init():
 
                 # Eingabebestätigung
                 while self.frageschleife != 0:
-                    print("Scan:", self.remoteServer, "IP:", self.remoteServerIP, "Press [Y] to start and [N] to abort")
+                    print("Scan:", self.remoteServer, "IP:", self.remoteServerIP, "Press [y] to start and [n] to abort")
                     self.frage = input()
                     if "y" in self.frage:
                         self.inputs = 0
                         self.frageschleife = 0
+                        # Frage ob verbose mode aktiviert werden soll
+                        while self.frageschleife != 1:
+                            print()
+                            print("Verbose mode on [y] or off [n]")
+                            self.frage = input()
+                            if "y" in self.frage:
+                                print()
+                                print("Verbose Activated!")
+                                print()
+                                self.verbose = 1
+                                self.frageschleife = 1
+                            elif "n" in self.frage:
+                                print()
+                                print("Verbose Deactivated")
+                                print()
+                                self.verbose = 0
+                                self.frageschleife = 1
+                            elif "y" or "n" not in self.frage:
+                                print()
+                                print("Wrong Value, Try Again!")
+                                print()
+                                self.frageschleife = 0
+                                continue
+                        self.frageschleife = 0
                     elif "n" in self.frage:
+                        print()
                         print("Aborted!")
                         sys.exit()
                     elif "y" or "n" not in self.frage:
                         print("Wrong Value, Try Again!")
+                        print()
                         continue
 
             # Fehlerbehandlung
@@ -116,7 +148,7 @@ class PortScanner_Init():
         elif x == 3:
             self.zeitbeginn = time.mktime(self.zeitbeginn)
             self.zeitende = time.mktime(self.zeitende)
-            self.time_diff_sek = self.zeitbeginn - self.zeitende
+            self.time_diff_sek = self.zeitende - self.zeitbeginn
             self.time_diff_min = self.time_diff_sek/60
             self.time_diff_std = self.time_diff_min/60
 
@@ -151,6 +183,9 @@ class PortScanner(PortScanner_Init):
         try:
             # Portscan der Ports 1 - 35535
             for self.port in range(1, 35536):
+                # Teste ob verbose modus aktiviert wurde (1 = True, 0 = False)
+                if portscanner_init.verbose == 1:
+                    time.sleep(0.01)
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.result = self.sock.connect_ex((self.remoteServerIP, self.port))
 
@@ -166,6 +201,7 @@ class PortScanner(PortScanner_Init):
 
                 # Ausgabe über offene Ports wenn Port 35535 erreicht
                 if self.port == 35535:
+                    self.banner()
                     print()
                     print("Results:", self.count, "Open Ports found")
                     print("-" * 60)
