@@ -26,7 +26,7 @@ class PortScanner_Init():
         self.time_diff_min = bytes()
         self.time_diff_std = bytes()
 
-        # Zieldaten
+        # Zieldaten des Hosts
         self.remoteServer = []
         self.remoteServerIP = bytes()
 
@@ -51,6 +51,10 @@ class PortScanner_Init():
             print("Scanning Completed in: ", self.time_diff_std, "Hours", self.time_diff_min, "Minutes", self.time_diff_sek, "Seconds")
             print(f"Date: {self.tag:02d}.{self.monat:02d}.{self.jahr:4d}")
             print(f"Time: {self.stunde:02d}:{self.minute:02d}:{self.sekunde:02d}")
+
+        elif x == 2:
+            print()
+            print("Scanner Closed!")
 
     # Eingabe
     def eingabe(self):
@@ -168,16 +172,17 @@ class PortScanner(PortScanner_Init):
                     # Füge offenen Port an die Liste der offenen Ports an
                     self.portlist.append(self.port)
 
-                # Port der aktuell gescannt wird
-                else:
-                    print("Scanning Port: ", self.port)
-
                 # Ausgabe über offene Ports wenn Port 35535 erreicht
                 if self.port == 35535:
                     print()
                     print("Results:", self.count, "Open Ports found")
                     print("-" * 60)
-                    print("Port {}: 	 Open".format(self.portlist))
+                    print("Port/s Open: {}".format(self.portlist))
+
+                # Port der zuletzt gescannt wurde
+                else:
+                    print("Scanning Port: ", self.port)
+
                 self.sock.close()
 
         # Fehlerbehandlung bei start und während des Scans
@@ -225,7 +230,5 @@ portscanner_init.zeit(3)
 portscanner_init.ausgabe(1)
 
 # Sicheres Beenden
-print()
-print("-" * 60)
-print("Scanner Closed!")
+portscanner_init.ausgabe(2)
 sys.exit()
