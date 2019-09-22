@@ -159,10 +159,8 @@ class PortScanner(PortScanner_Init):
                     print("<-")
                     print("Port {}: 	 Open".format(self.port))
                     print("->")
-
                     # Erhöhe Zähler für offene Ports
                     self.count += 1
-
                     # Füge offenen Port an die Liste der offenen Ports an
                     self.portlist.append(self.port)
 
@@ -172,7 +170,6 @@ class PortScanner(PortScanner_Init):
                     print("Results:", self.count, "Open Ports found")
                     print("-" * 60)
                     print("Port/s Open: {}".format(self.portlist))
-
                 # Port der zuletzt gescannt wurde
                 else:
                     print("Scanning Port: ", self.port)
