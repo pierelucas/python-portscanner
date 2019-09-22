@@ -6,7 +6,7 @@ import subprocess
 import sys
 import time
 
-# Klasse
+# Klasse mit Eigenschaften, Eingabe, Ausgabe und Zeitberechnung
 class PortScanner_Init():
 
     # Methoden
@@ -17,20 +17,18 @@ class PortScanner_Init():
         self.jahr, self.monat, self.tag = self.lt[0:3]
         self.stunde, self.minute, self.sekunde = self.lt[3:6]
 
-        #
+        # Erfassung von Zeitwerten
         self.zeitbeginn = bytes()
         self.zeitende = bytes()
 
+        # Werte für die Berechnung von Differenzen
         self.time_diff_sek = bytes()
         self.time_diff_min = bytes()
         self.time_diff_std = bytes()
 
-        # Daten
+        # Zieldaten
         self.remoteServer = []
         self.remoteServerIP = bytes()
-
-        # Zähler
-        self.count = 0
 
     # Ausgabe
     def __str__(self):
@@ -125,15 +123,15 @@ class PortScanner_Init():
         print("Author: PiereLucas")
         print("-" * 60)
 
-
+# Klasse mit Hauptfunktion
 class PortScanner(PortScanner_Init):
 
     def __init__(self):
 
-        # Init der Basisklasse, Eigenschaften werden übernommen
+        # Erbe von Basisklasse Portscanner_init
         PortScanner_Init.__init__(self)
 
-        # Offenner Ports wird hier gespeichert
+        # Offener Port wird hier zwischengespeichert bevor er an die Liste angefügt wird
         self.open = 0
 
         # Anzahl der offenen Ports wird hier gespeichert
@@ -146,7 +144,7 @@ class PortScanner(PortScanner_Init):
 
         pass
 
-    # Hauptprogramm
+    # Hauptfunktion
     def scan(self):
 
         try:
@@ -154,19 +152,27 @@ class PortScanner(PortScanner_Init):
             for self.port in range(1, 35536):
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.result = self.sock.connect_ex((self.remoteServerIP, self.port))
+
+                # Wenn offener Port gefunden wurde
                 if self.result == 0:
                     print("<-")
                     print("Port {}: 	 Open".format(self.port))
                     print("->")
+
+                    # Erhöhe Zähler für offene Ports
                     self.count += 1
+
+                    # Zwischenspeicher
                     self.open = self.port
+
+                    # Füge offenen Port an die Liste der offenen Ports an
                     self.portlist.append(self.port)
 
-                # Gebe Ports wieder
+                # Port der aktuell gescannt wird
                 else:
                     print("Scanning Port: ", self.port)
 
-                # Ausgabe über offene Ports
+                # Ausgabe über offene Ports wenn Port 35535 erreicht
                 if self.port == 35535:
                     print()
                     print("Results:", self.count, "Open Ports found")
@@ -174,7 +180,7 @@ class PortScanner(PortScanner_Init):
                     print("Port {}: 	 Open".format(self.portlist))
                 self.sock.close()
 
-        # Fehlerbehandlung während des Scans
+        # Fehlerbehandlung bei start und während des Scans
         except KeyboardInterrupt:
             print()
             print("You presses Ctrl+C")
@@ -190,6 +196,8 @@ class PortScanner(PortScanner_Init):
             print("Couldn't connect to server")
             sys.exit()
 
+# Programm
+# ->
 
 # Instanzobjekte
 portscanner_init = PortScanner_Init()
@@ -215,3 +223,9 @@ portscanner_init.zeit(3)
 
 # Gebe die Zeitinformation aus
 portscanner_init.ausgabe(1)
+
+# Sicheres Beenden
+print()
+print("-" * 60)
+print("Scanner Closed!")
+sys.exit()
