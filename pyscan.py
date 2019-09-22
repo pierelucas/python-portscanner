@@ -17,6 +17,7 @@ class PortScanner_Init():
         self.jahr, self.monat, self.tag = self.lt[0:3]
         self.stunde, self.minute, self.sekunde = self.lt[3:6]
 
+        #
         self.zeitbeginn = bytes()
         self.zeitende = bytes()
 
@@ -56,8 +57,10 @@ class PortScanner_Init():
     # Eingabe
     def eingabe(self):
 
+        # Terminal leeren
         subprocess.call('clear', shell=True)
 
+        # Banneraufruf
         self.banner()
 
         # Schleifeninitialisierung
@@ -85,6 +88,7 @@ class PortScanner_Init():
                         print("Wrong Value, Try Again!")
                         continue
 
+            # Fehlerbehandlung
             except KeyboardInterrupt:
                 print()
                 print("You presses Ctrl+C")
@@ -105,13 +109,16 @@ class PortScanner_Init():
             self.zeitbeginn = time.localtime()
         elif x == 2:
             self.zeitende = time.localtime()
+
+        # Berechnung von Zeitspannen
         elif x == 3:
             self.zeitbeginn = time.mktime(self.zeitbeginn)
             self.zeitende = time.mktime(self.zeitende)
-            self.time_diff_sek = self.zeitende - self.zeitbeginn
+            self.time_diff_sek = self.zeitbeginn - self.zeitende
             self.time_diff_min = self.time_diff_sek/60
             self.time_diff_std = self.time_diff_min/60
 
+    # Banner
     def banner(self):
         print("-" * 60)
         print("Python Portscanner")
@@ -123,22 +130,28 @@ class PortScanner(PortScanner_Init):
 
     def __init__(self):
 
+        # Init der Basisklasse, Eigenschaften werden übernommen
         PortScanner_Init.__init__(self)
 
+        # Offenner Ports wird hier gespeichert
         self.open = 0
-        self.exit = 0
+
+        # Anzahl der offenen Ports wird hier gespeichert
+        self.count = 0
+
+        # Alle offenen Ports werden in dieser Liste gespeichert
+        self.portlist = []
 
     def __str__(self):
 
         pass
 
-
     # Hauptprogramm
     def scan(self):
 
         try:
-            # Portscan der Ports 1 - 1024
-            for self.port in range(1, 1025):
+            # Portscan der Ports 1 - 35535
+            for self.port in range(1, 35536):
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.result = self.sock.connect_ex((self.remoteServerIP, self.port))
                 if self.result == 0:
@@ -147,15 +160,21 @@ class PortScanner(PortScanner_Init):
                     print("->")
                     self.count += 1
                     self.open = self.port
+                    self.portlist.append(self.port)
+
+                # Gebe Ports wieder
                 else:
                     print("Scanning Port: ", self.port)
-                if self.port == 1024:
+
+                # Ausgabe über offene Ports
+                if self.port == 35535:
                     print()
                     print("Results:", self.count, "Open Ports found")
                     print("-" * 60)
-                    print("Port {}: 	 Open".format(self.open))
+                    print("Port {}: 	 Open".format(self.portlist))
                 self.sock.close()
 
+        # Fehlerbehandlung während des Scans
         except KeyboardInterrupt:
             print()
             print("You presses Ctrl+C")
@@ -179,13 +198,13 @@ portscanner = PortScanner()
 # Eingabe
 portscanner_init.eingabe()
 
-# Ausgabe
+# Ausgabe über laufenden Scan
 portscanner_init.ausgabe(0)
 
 # Prüfe wann der Scan startet
 portscanner_init.zeit(1)
 
-# Range Funktion zwischen 1 und 1024. Wird alle Ports zwischen 1 und 1024 Scannen
+# Hauptfunktion
 portscanner.scan()
 
 # Prüfe die Zeit nochmal
