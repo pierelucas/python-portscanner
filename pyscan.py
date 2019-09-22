@@ -49,9 +49,9 @@ class PortScanner_Init():
             print()
             print("Time Consumetion:")
             print("-" * 60)
-            print("Scanning Completed in: ", self.time_diff_min, "Minutes or ", self.time_diff_sek, "Seconds")
-            print(f"Date: {portscanner_init.tag:02d}.{portscanner_init.monat:02d}.{portscanner_init.jahr:4d}")
-            print(f"Time: {portscanner_init.stunde:02d}:{portscanner_init.minute:02d}:{portscanner_init.sekunde:02d}")
+            print("Scanning Completed in: ", self.time_diff_std, "Hours", self.time_diff_min, "Minutes", self.time_diff_sek, "Seconds")
+            print(f"Date: {self.tag:02d}.{self.monat:02d}.{self.jahr:4d}")
+            print(f"Time: {self.stunde:02d}:{self.minute:02d}:{self.sekunde:02d}")
 
     # Eingabe
     def eingabe(self):
