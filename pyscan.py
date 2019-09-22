@@ -44,6 +44,8 @@ class PortScanner_Init():
             print(portscanner_init)
         elif x == 1:
             print()
+            print("Time Consumetion:")
+            print("-" + 60)
             print('Scanning Completed in: ', portscanner_init.zeitgesamt)
             print(f"Datum: {portscanner_init.tag:02d}.{portscanner_init.monat:02d}.{portscanner_init.jahr:4d}")
             print(f"Uhrzeit: {portscanner_init.stunde:02d}:{portscanner_init.minute:02d}:{portscanner_init.sekunde:02d}")
