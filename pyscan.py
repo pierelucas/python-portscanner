@@ -135,9 +135,6 @@ class PortScanner(PortScanner_Init):
         # Erbe von Basisklasse Portscanner_init
         PortScanner_Init.__init__(self)
 
-        # Offener Port wird hier zwischengespeichert bevor er an die Liste angefügt wird
-        self.open = 0
-
         # Anzahl der offenen Ports wird hier gespeichert
         self.count = 0
 
@@ -165,9 +162,6 @@ class PortScanner(PortScanner_Init):
 
                     # Erhöhe Zähler für offene Ports
                     self.count += 1
-
-                    # Zwischenspeicher
-                    self.open = self.port
 
                     # Füge offenen Port an die Liste der offenen Ports an
                     self.portlist.append(self.port)
