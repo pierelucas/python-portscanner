@@ -4,8 +4,7 @@
 import socket
 import subprocess
 import sys
-from time import localtime
-from datetime import datetime
+import time
 
 # Klasse
 class PortScanner_Init():
@@ -14,13 +13,16 @@ class PortScanner_Init():
     def __init__(self):
 
         # Zeitmessung
-        self.lt = localtime()
+        self.lt = time.localtime()
         self.jahr, self.monat, self.tag = self.lt[0:3]
         self.stunde, self.minute, self.sekunde = self.lt[3:6]
 
         self.zeitbeginn = bytes()
         self.zeitende = bytes()
-        self.zeitgesamt = bytes()
+
+        self.time_diff_sek = bytes()
+        self.time_diff_min = bytes()
+        self.time_diff_std = bytes()
 
         # Daten
         self.remoteServer = []
@@ -39,14 +41,15 @@ class PortScanner_Init():
     def ausgabe(self, x):
 
         if x == 0:
-            print(f"Date: {portscanner_init.tag:02d}.{portscanner_init.monat:02d}.{portscanner_init.jahr:4d}")
-            print(f"Time: {portscanner_init.stunde:02d}:{portscanner_init.minute:02d}:{portscanner_init.sekunde:02d}")
-            print(portscanner_init)
+            print(f"Date: {self.tag:02d}.{self.monat:02d}.{self.jahr:4d}")
+            print(f"Time: {self.stunde:02d}:{self.minute:02d}:{self.sekunde:02d}")
+            self.__str__()
+
         elif x == 1:
             print()
             print("Time Consumetion:")
             print("-" * 60)
-            print('Scanning Completed in: ', portscanner_init.zeitgesamt)
+            print("Scanning Completed in: ", self.time_diff_min, "Minutes or ", self.time_diff_sek, "Seconds")
             print(f"Date: {portscanner_init.tag:02d}.{portscanner_init.monat:02d}.{portscanner_init.jahr:4d}")
             print(f"Time: {portscanner_init.stunde:02d}:{portscanner_init.minute:02d}:{portscanner_init.sekunde:02d}")
 
@@ -81,11 +84,15 @@ class PortScanner_Init():
     def zeit(self, x):
 
         if x == 1:
-            self.zeitbeginn = datetime.now()
+            self.zeitbeginn = time.localtime()
         elif x == 2:
-            self.zeitende = datetime.now()
+            self.zeitende = time.localtime()
         elif x == 3:
-            self.zeitgesamt = self.zeitbeginn - self.zeitende
+            self.zeitbeginn = time.mktime(self.zeitbeginn)
+            self.zeitende = time.mktime(self.zeitende)
+            self.time_diff_sek = self.zeitende - self.zeitbeginn
+            self.time_diff_min = self.time_diff_sek/60
+            self.time_diff_std = self.time_diff_min/60
 
     def banner(self):
         print("-" * 60)
