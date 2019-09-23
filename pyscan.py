@@ -33,6 +33,12 @@ class PortScanner_Init:
         # Verbose Modus
         self.verbose = 0
 
+        # Anzahl der offenen Ports wird hier gespeichert
+        self.count = 0
+
+        # Alle offenen Ports werden in dieser Liste gespeichert
+        self.portlist = []
+
     # Ausgabe
     def __str__(self):
 
@@ -65,8 +71,9 @@ class PortScanner_Init:
     # Eingabe
     def eingabe(self):
 
-        # Terminal leeren
+        # Terminal leeren, Leere Datei erzeugen
         subprocess.call('clear', shell=True)
+        subprocess.call('touch results.txt', shell=True)
 
         # Banneraufruf
         self.banner()
@@ -159,26 +166,20 @@ class PortScanner_Init:
         print("Author: PiereLucas")
         print("-" * 60)
 
-# Klasse mit Hauptfunktion
-class PortScanner(PortScanner_Init):
-
-    def __init__(self):
-
-        # Erbe von Basisklasse Portscanner_init
-        PortScanner_Init.__init__(self)
-
-        # Anzahl der offenen Ports wird hier gespeichert
-        self.count = 0
-
-        # Alle offenen Ports werden in dieser Liste gespeichert
-        self.portlist = []
-
-    def __str__(self):
-
-        pass
-
     # Hauptfunktion
     def scan(self):
+
+        self.file = open('results.txt', 'wt')
+        self.file.write("-" * 60)
+        self.file.write("\n")
+        self.file.write("Host: ")
+        self.file.write(self.remoteServer)
+        self.file.write("\n")
+        self.file.write("IP: ")
+        self.file.write(self.remoteServerIP)
+        self.file.write("\n")
+        self.file.write("-" * 60)
+        self.file.write("\n")
 
         try:
             # Portscan der Ports 1 - 35535
@@ -196,6 +197,15 @@ class PortScanner(PortScanner_Init):
                     print("->")
                     # Erhöhe Zähler für offene Ports
                     self.count += 1
+                    # Schreibe in Datei
+                    self.file.write("\n")
+                    self.file.write("Nr: ")
+                    self.file.write(self.count)
+                    self.file.write("\n Port: ")
+                    self.file.write(self.port)
+                    self.file.write("\n")
+                    self.file.write("-" * 60)
+
                     # Füge offenen Port an die Liste der offenen Ports an
                     self.portlist.append(self.port)
 
@@ -211,6 +221,8 @@ class PortScanner(PortScanner_Init):
                     print("Scanning Port: ", self.port)
 
                 self.sock.close()
+
+            self.file.close()
 
         # Fehlerbehandlung bei start und während des Scans
         except KeyboardInterrupt:
@@ -233,7 +245,6 @@ class PortScanner(PortScanner_Init):
 
 # Instanzobjekte
 portscanner_init = PortScanner_Init()
-portscanner = PortScanner()
 
 # Eingabe
 portscanner_init.eingabe()
@@ -245,7 +256,7 @@ portscanner_init.ausgabe(0)
 portscanner_init.zeit(1)
 
 # Hauptfunktion
-portscanner.scan()
+portscanner_init.scan()
 
 # Prüfe die Zeit nochmal
 portscanner_init.zeit(2)
