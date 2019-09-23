@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
 # Module
-import socket
-import subprocess
-import sys
-import time
+import socket, subprocess ,sys, time
 
 # Klasse mit Eigenschaften, Eingabe, Ausgabe und Zeitberechnung
 class PortScanner_Init:
