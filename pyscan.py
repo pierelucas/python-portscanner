@@ -2,6 +2,7 @@
 
 # Module
 import socket, subprocess ,sys, time
+from collections import deque
 
 # Klasse mit Eigenschaften, Eingabe, Ausgabe und Zeitberechnung
 class PortScanner_Init:
@@ -28,13 +29,13 @@ class PortScanner_Init:
         self.remoteServerIP = bytes()
 
         # Verbose Modus
-        self.verbose = 0
+        self.verbose = False
 
         # Anzahl der offenen Ports wird hier gespeichert
         self.count = 0
 
         # Alle offenen Ports werden in dieser Liste gespeichert
-        self.portlist = []
+        self.portlist = deque([])
 
     # Ausgabe
     def __str__(self):
@@ -102,13 +103,12 @@ class PortScanner_Init:
                                 print()
                                 print("Verbose Activated!")
                                 print()
-                                self.verbose = 1
+                                self.verbose = True
                                 self.frageschleife = 1
                             elif "n" in self.frage:
                                 print()
                                 print("Verbose Deactivated")
                                 print()
-                                self.verbose = 0
                                 self.frageschleife = 1
                             elif "y" or "n" not in self.frage:
                                 print()
@@ -163,46 +163,60 @@ class PortScanner_Init:
         print("Author: PiereLucas")
         print("-" * 60)
 
+    def results(self, x):
+        if x == 0:
+            # Öffnen und Header der Textdatei
+            self.file = open('results.txt', 'wt')
+            self.file.write("Python Portscanner by PiereLucas")
+            self.file.write("\n")
+            self.file.write("Results ==>")
+            self.file.write("\n")
+            self.file.write("Host: ")
+            self.file.write(self.remoteServer)
+            self.file.write("\n")
+            self.file.write("IP: ")
+            self.file.write(self.remoteServerIP)
+            self.file.write("\n")
+            self.file.write("-" * 60)
+            self.file.write("\n")
+        # Offene Ports in der Textdatei
+        elif x == 1:
+            self.file.write("\n")
+            self.file.write("Nr: ")
+            self.file.write(self.count)
+            self.file.write("\n Port: ")
+            self.file.write(self.port)
+            self.file.write("\n")
+            self.file.write("-" * 60)
+        # Schließen der Textdatei
+        elif x == 2:
+            self.file.close()
+
+
     # Hauptfunktion
     def scan(self):
 
-        self.file = open('results.txt', 'wt')
-        self.file.write("-" * 60)
-        self.file.write("\n")
-        self.file.write("Host: ")
-        self.file.write(self.remoteServer)
-        self.file.write("\n")
-        self.file.write("IP: ")
-        self.file.write(self.remoteServerIP)
-        self.file.write("\n")
-        self.file.write("-" * 60)
-        self.file.write("\n")
+        self.results(0)
 
         try:
             # Portscan der Ports 1 - 35535
             for self.port in range(1, 35536):
-                # Teste ob verbose modus aktiviert wurde (1 = True, 0 = False)
-                if portscanner_init.verbose == 1:
+                # Teste ob verbose modus aktiviert wurde
+                if self.verbose:
                     time.sleep(0.01)
+                # Teste ob der Port geöffnet ist
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.result = self.sock.connect_ex((self.remoteServerIP, self.port))
+                self.resultscan = self.sock.connect_ex((self.remoteServerIP, self.port))
 
                 # Wenn offener Port gefunden wurde
-                if self.result == 0:
+                if self.resultscan == 0:
                     print("<-")
                     print("Port {}: 	 Open".format(self.port))
                     print("->")
                     # Erhöhe Zähler für offene Ports
                     self.count += 1
                     # Schreibe in Datei
-                    self.file.write("\n")
-                    self.file.write("Nr: ")
-                    self.file.write(self.count)
-                    self.file.write("\n Port: ")
-                    self.file.write(self.port)
-                    self.file.write("\n")
-                    self.file.write("-" * 60)
-
+                    self.results(1)
                     # Füge offenen Port an die Liste der offenen Ports an
                     self.portlist.append(self.port)
 
@@ -219,7 +233,7 @@ class PortScanner_Init:
 
                 self.sock.close()
 
-            self.file.close()
+            self.results(2)
 
         # Fehlerbehandlung bei start und während des Scans
         except KeyboardInterrupt:
