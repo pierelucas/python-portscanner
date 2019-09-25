@@ -215,7 +215,7 @@ class PortScanner_Init:
                 # Wenn offener Port gefunden wurde
                 if self.resultscan == 0:
                     print("<-")
-                    print("Port {}: 	 Open".format(self.port))
+                    print(colorama.Fore.RED + "Port {}: 	 Open".format(self.port) + colorama.Style.RESET_ALL)
                     print("->")
                     # Erhöhe Zähler für offene Ports
                     self.count += 1
