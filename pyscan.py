@@ -133,15 +133,15 @@ class PortScanner_Init:
             # Fehlerbehandlung
             except KeyboardInterrupt:
                 print()
-                print("You presses Ctrl+C")
+                print(colorama.Fore.RED + "You presses Ctrl+C")
                 sys.exit()
             except RuntimeError:
                 print()
-                print("Wrong Statement")
+                print(colorama.Fore.RED + "Wrong Statement")
                 sys.exit()
             except ValueError:
                 print()
-                print("You must enter a valid Host")
+                print(colorama.Fore.RED + "You must enter a valid Host")
                 sys.exit()
 
     # Methode zur Ermittlung von Zeitwerten
@@ -242,17 +242,17 @@ class PortScanner_Init:
         # Fehlerbehandlung bei start und während des Scans
         except KeyboardInterrupt:
             print()
-            print("You presses Ctrl+C")
+            print(colorama.Fore.RED + "You presses Ctrl+C")
             sys.exit()
 
         except socket.gaierror:
             print()
-            print("Hostname could not be resolved. Exiting")
+            print(colorama.Fore.RED + "Hostname could not be resolved. Exiting")
             sys.exit()
 
         except socket.error:
             print()
-            print("Couldn't connect to server")
+            print(colorama.Fore.RED + "Couldn't connect to server")
             sys.exit()
 
 # Programm
