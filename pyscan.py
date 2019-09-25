@@ -242,7 +242,7 @@ class PortScanner_Init:
         # Fehlerbehandlung bei start und während des Scans
         except KeyboardInterrupt:
             print()
-            print(colorama.Fore.RED + "You presses Ctrl+C")
+            print(colorama.Fore.RED + "You pressed Ctrl+C")
             sys.exit()
 
         except socket.gaierror:
