@@ -4,6 +4,10 @@
 import socket, subprocess ,sys, time
 from collections import deque
 
+# Colorama
+import colorama
+colorama.init()
+
 # Klasse mit Eigenschaften, Eingabe, Ausgabe und Zeitberechnung
 class PortScanner_Init:
 
@@ -158,10 +162,10 @@ class PortScanner_Init:
 
     # Banner
     def banner(self):
-        print("-" * 60)
-        print("Python Portscanner")
-        print("Author: PiereLucas")
-        print("-" * 60)
+        print(colorama.Fore.RED + "-" * 60)
+        print(colorama.Fore.CYAN + "Python Portscanner", "\n" + "Author: Pierelucas")
+        print(colorama.Fore.RED + "-" * 60)
+        print(colorama.Style.RESET_ALL)
 
     def results(self, x):
         if x == 0:
