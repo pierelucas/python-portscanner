@@ -68,7 +68,7 @@ class PortScanner_Init:
 
         elif x == 2:
             print()
-            print("Scanner Closed!")
+            print(colorama.Fore.RED + "Scanner Closed!")
 
     # Eingabe
     def eingabe(self):
@@ -228,9 +228,9 @@ class PortScanner_Init:
                 if self.port == 35535:
                     self.banner()
                     print()
-                    print("Results:", self.count, "Open Ports found")
+                    print("Results:", colorama.Fore.RED + self.count + colorama.Style.RESET_ALL, "Open Ports found")
                     print("-" * 60)
-                    print("Port/s Open: {}".format(self.portlist))
+                    print(colorama.Fore.CYAN + "Port/s Open: {}".format(self.portlist) + colorama.Style.RESET_ALL)
                 # Port der zuletzt gescannt wurde
                 else:
                     print("Scanning Port: ", self.port)
