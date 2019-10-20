@@ -45,7 +45,7 @@ class PortScanner_Init:
     def __str__(self):
 
         return "-" * 60 + "\n" \
-               + "Please wait, Starting to scan remote Host: " + self.remoteServerIP \
+               + "Please wait, Starting to scan remote Host: " + str(self.remoteServerIP) \
                + "\n" + "-" * 60
 
     def ausgabe(self, x):
