@@ -41,6 +41,7 @@ class Scanner():
         pass
 
     def run(self):
+        pass
 
 class Controller():
 
@@ -56,6 +57,8 @@ class Controller():
         # Details
         self.target_addr = ""
         self.target_port = 0
+        self.start_port = 0
+        self.end_port = 0
 
     def argum(self):
         parser = ArgumentParser(description=self.banner)
@@ -64,25 +67,41 @@ class Controller():
         args = parser.parse_args()
         if self.check_argum(args=args):
             return
-        else:
-            print("Wrong Arguments")
-            sys.exit(0)
 
     def check_argum(self, *, args):
-        pass
-
-    def out(self):
-        pass
+        if args.target_addr and args.port_ran:
+            self.target_addr = args.target_addr
+            self.start_port, self.end_port = self.ports(args.port_ran)
+            return True
+        elif args.target_addr:
+            print("No Port Range defined")
+            sys.exit(0)
+        elif args.port_ran:
+            print("No target address defined")
+            sys.exit(0)
+        else:
+            print("Use -h or --help")
+            sys.exit(0)
 
     def ports(self, port_range):
         # make list
-        ports = port_range.split("-")
-        start_port = ports[0]
-        end_port = ports[1]
-        return start_port, end_port
+        try:
+            ports = port_range.split("-")
+            start_port = int(ports[0])
+            end_port = int(ports[1])
+        except Exception:
+            print("please define port range in format [1-x]")
+            sys.exit(0)
+        else:
+            return start_port, end_port
+
+    def action(self):
+        for port in range(self.start_port, self.end_port+1):
+
 
     def run(self):
-        pass
+        # Start time
+        self.argum()
 
 
 if __name__ == "__main__":
