@@ -29,14 +29,15 @@ class Scanner():
 
     def time_str(self):
         lt = time.localtime()
-        year, month, day = lt[3-6]
-        today = f"{year:4d}_{month:02d}_{day:02d}_"
+        year, month, day = lt[0:3]
+        today = f"{year:02d}_{month:02d}_{day:02d}_"
         return today
 
-    def write_file(self, name, target_port):
-        file_name = self.time_str() + name
+    def write_file(self, addr, port):
+        str_addr = addr.replace(".", "-")
+        file_name = "time{}+addr{}.txt".format(self.time_str(), str_addr)
         with open(file_name, 'a+') as f:
-            f.write("OPEN      {}".format(target_port))
+            f.write("[+] OPEN        [{}]:[{}]".format(addr, port))
 
 class Controller(Scanner):
 
@@ -88,19 +89,16 @@ class Controller(Scanner):
 
     def action(self):
         count = 0
-        name = self.target_addr.replace(".", "-")
+        print(CYAN + "Connected to [{}]".format(self.target_addr) + RESET)
         for port in range(self.start_port, self.end_port+1):
             self.target_port = port
-            print("Connected to [{}]:[{}]".format(self.target_addr, port))
             port_open = self.scan_port(target_addr=str(self.target_addr), target_port=int(self.target_port))
             if port_open:
                 count += 1
-                self.write_file(name, port)
-                print(GREEN + "[+] OPEN      PORT:[{}]".format(port) + RESET)
-                print()
+                self.write_file(self.target_addr, port)
+                print(GREEN + "[+] OPEN        [{}]:[{}]".format(self.target_addr, port) + RESET)
             else:
-                print(RED + "[-] CLOSED      PORT:[{}]".format(port) + RESET)
-                print()
+                print(RED + "[-] CLOSED      [{}]:[{}]".format(self.target_addr, port) + RESET)
             continue
         print(CYAN + "Sucessfully scanned host [{}] and found [{}] open ports".format(self.target_addr, count) + RESET)
         sys.exit(0)
