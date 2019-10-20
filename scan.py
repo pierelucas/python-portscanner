@@ -6,6 +6,8 @@
 # Module
 import socket
 import sys
+import string
+import random
 import time
 from colorama import Fore
 from argparse import ArgumentParser
@@ -16,41 +18,29 @@ RED = Fore.RED
 GREEN = Fore.GREEN
 RESET = Fore.RESET
 
-class SuperScan(socket):
-    def __init__(self, fam, typ):
-        super(SuperScan, self).__init__(family=fam, type=typ)
-
-    def __str__(self):
-        return GREEN + "SuperScan loaded  ..." + RESET
-
 class Scanner():
-    def __init__(self, *, target_addr, target_port):
-        # Details
-        self.addr = target_addr
-        self.port = target_port
 
-    def scan_port(self):
+    def scan_port(self, *, target_addr, target_port):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            result = sock.connect_ex((target_addr, target_port))
+        if result == 0:
+            return True
+
+    def rnd_str(self):
+        letters = string.ascii_lowercase + string.digits
+        return "".join(random.choice(letters) for i in range(4))
+
+    def time_str(self):
+
+
+    def write_file(self, target_port):
         pass
 
-    def write_file(self):
-        pass
 
-    def make_thread(self):
-        pass
-
-    def run(self):
-        pass
 
 class Controller(Scanner):
 
     def __init__(self):
-        # Super Constructor
-        super(Controller, self).__init__(target_addr=self.target_addr, target_port=self.target_port)
-
-        # Time
-        self.lt = time.localtime()
-        self.year, self.month, self.day = self.lt[0:3]
-        self.hour, self.minute, self.second = self.lt[3:6]
 
         # Banner
         self.banner = "PASS"
@@ -98,13 +88,17 @@ class Controller(Scanner):
 
     def action(self):
         for port in range(self.start_port, self.end_port+1):
-
-
+            self.target_port = port
+            port_open = self.scan_port(target_addr=self.target_addr, target_port=self.target_port)
+            if port_open:
+                print("[+] OPEN:      {}".format(port))
+                self.write_file(port)
+            continue
 
     def run(self):
         # Start time
         self.argum()
-
+        self.action()
 
 
 if __name__ == "__main__":
