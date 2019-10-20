@@ -24,14 +24,12 @@ class SuperScan(socket):
         return GREEN + "SuperScan loaded  ..." + RESET
 
 class Scanner():
-    def __init__(self, *, target_addr, target_port, start_port, end_port):
+    def __init__(self, *, target_addr, target_port):
         # Details
         self.addr = target_addr
         self.port = target_port
-        self.start_port = start_port
-        self.end_port = end_port
 
-    def check_port(self):
+    def scan_port(self):
         pass
 
     def write_file(self):
@@ -43,9 +41,12 @@ class Scanner():
     def run(self):
         pass
 
-class Controller():
+class Controller(Scanner):
 
     def __init__(self):
+        # Super Constructor
+        super(Controller, self).__init__(target_addr=self.target_addr, target_port=self.target_port)
+
         # Time
         self.lt = time.localtime()
         self.year, self.month, self.day = self.lt[0:3]
@@ -99,9 +100,11 @@ class Controller():
         for port in range(self.start_port, self.end_port+1):
 
 
+
     def run(self):
         # Start time
         self.argum()
+
 
 
 if __name__ == "__main__":
