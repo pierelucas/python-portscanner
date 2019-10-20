@@ -31,12 +31,20 @@ class Scanner():
         return "".join(random.choice(letters) for i in range(4))
 
     def time_str(self):
+        lt = time.localtime()
+        year, month, day = lt[3-6]
+        today = f"{year:4d}_{month:02d}_{day:02d}_"
+        return today
 
-
-    def write_file(self, target_port):
-        pass
-
-
+    def write_file(self, id, target_port):
+        if id == "":
+            id = self.rnd_str()
+            file_name = self.time_str() + id
+        else:
+            file_name = self.time_str() + id
+        with open(file_name, 'a+') as f:
+            f.write("OPEN      {}".format(target_port))
+        return id
 
 class Controller(Scanner):
 
@@ -87,12 +95,13 @@ class Controller(Scanner):
             return start_port, end_port
 
     def action(self):
+        id = ""
         for port in range(self.start_port, self.end_port+1):
             self.target_port = port
             port_open = self.scan_port(target_addr=self.target_addr, target_port=self.target_port)
             if port_open:
                 print("[+] OPEN:      {}".format(port))
-                self.write_file(port)
+                id = self.write_file(id, port)
             continue
 
     def run(self):
