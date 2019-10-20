@@ -1,11 +1,5 @@
-[Python Portscanner - PyScan]
+### Python Portscanner
 
-This is just for a learnin Purpuose. Don't use this Tool in Real World!
+Python Portscanner actually in 2 versions.
 
-Don't bother me when its not working properly!
-
-Requirements:
-colorama
-
-best regards,
-PiereLucas
+I wrote this just for learning sockets
