@@ -105,12 +105,8 @@ class Controller(Scanner):
         print(CYAN + "Sucessfully scanned host [{}] and found [{}] open ports".format(self.target_addr, count) + RESET)
         sys.exit(0)
 
-    def run(self):
-        # Start time
-        self.argum()
-        self.action()
-
 
 if __name__ == "__main__":
     cc = Controller()
-    cc.run()
+    cc.argum()
+    cc.action()
