@@ -96,10 +96,10 @@ class Controller(Scanner):
             if port_open:
                 count += 1
                 self.write_file(name, port)
-                print(GREEN + "[+] OPEN:      {}".format(port) + RESET)
+                print(GREEN + "[+] OPEN      PORT:[{}]".format(port) + RESET)
                 print()
             else:
-                print(RED + "[-] CLOSED:      {}".format(port) + RESET)
+                print(RED + "[-] CLOSED      PORT:[{}]".format(port) + RESET)
                 print()
             continue
         print(CYAN + "Sucessfully scanned host [{}] and found [{}] open ports".format(self.target_addr, count) + RESET)
