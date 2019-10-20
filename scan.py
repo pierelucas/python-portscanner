@@ -6,8 +6,6 @@
 # Module
 import socket
 import sys
-import string
-import random
 import time
 from colorama import Fore
 from argparse import ArgumentParser
@@ -22,9 +20,12 @@ class Scanner():
 
     def scan_port(self, *, target_addr, target_port):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(0.2)
             result = sock.connect_ex((target_addr, target_port))
-        if result == 0:
-            return True
+            if result == 0:
+                return True
+            else:
+                return False
 
     def time_str(self):
         lt = time.localtime()
@@ -42,7 +43,7 @@ class Controller(Scanner):
     def __init__(self):
 
         # Banner
-        self.banner = "PASS"
+        self.banner = CYAN + "Python Portscanner by PiereLucas (Julian Huch)" + RESET
 
         # Details
         self.target_addr = ""
@@ -52,8 +53,8 @@ class Controller(Scanner):
 
     def argum(self):
         parser = ArgumentParser(description=self.banner)
-        parser.add_argument("-t", "--target", dest="target_addr", required=True, metavar="Target Address")
-        parser.add_argument("-p", "--port-range", dest="port_ran", required=True, metavar="Port Range")
+        parser.add_argument("-t", "--target", dest="target_addr", metavar=GREEN + "Target Address" + RESET, help=CYAN + "Define Target Host" + RESET)
+        parser.add_argument("-p", "--port-range", dest="port_ran", metavar=GREEN + "Port Range" + RESET, help=CYAN + "Define Port Range [N-N]" + RESET)
         args = parser.parse_args()
         if self.check_argum(args=args):
             return
@@ -86,14 +87,23 @@ class Controller(Scanner):
             return start_port, end_port
 
     def action(self):
+        count = 0
         name = self.target_addr.replace(".", "-")
         for port in range(self.start_port, self.end_port+1):
             self.target_port = port
-            port_open = self.scan_port(target_addr=self.target_addr, target_port=self.target_port)
+            print("Connected to [{}]:[{}]".format(self.target_addr, port))
+            port_open = self.scan_port(target_addr=str(self.target_addr), target_port=int(self.target_port))
             if port_open:
-                print("[+] OPEN:      {}".format(port))
+                count += 1
                 self.write_file(name, port)
+                print(GREEN + "[+] OPEN:      {}".format(port) + RESET)
+                print()
+            else:
+                print(RED + "[-] CLOSED:      {}".format(port) + RESET)
+                print()
             continue
+        print(CYAN + "Sucessfully scanned host [{}] and found [{}] open ports".format(self.target_addr, count) + RESET)
+        sys.exit(0)
 
     def run(self):
         # Start time
@@ -102,4 +112,5 @@ class Controller(Scanner):
 
 
 if __name__ == "__main__":
-    pass
+    cc = Controller()
+    cc.run()
