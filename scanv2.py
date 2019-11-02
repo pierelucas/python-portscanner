@@ -3,6 +3,7 @@
 # Creation: 20.10.2019
 # Last update: 20.10.2019
 
+
 # Module
 import socket
 import sys
@@ -10,11 +11,13 @@ import time
 from colorama import Fore
 from argparse import ArgumentParser
 
+
 # Colors
 CYAN = Fore.CYAN
 RED = Fore.RED
 GREEN = Fore.GREEN
 RESET = Fore.RESET
+
 
 class Scanner():
 
@@ -38,6 +41,7 @@ class Scanner():
         file_name = "time{}+addr{}.txt".format(self.time_str(), str_addr)
         with open(file_name, 'a+') as f:
             f.write("[+] OPEN        [{}]:[{}]".format(addr, port))
+
 
 class Controller(Scanner):
 
